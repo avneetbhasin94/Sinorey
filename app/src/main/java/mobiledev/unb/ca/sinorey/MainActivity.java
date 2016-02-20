@@ -16,6 +16,20 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.location.Location;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.provider.Settings;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
 /**
  * ShootAndCropActivity demonstrates capturing and cropping camera images
  * - user presses button to capture an image using the device camera
@@ -36,6 +50,8 @@ public class MainActivity extends Activity implements OnClickListener {
 
     private final String TAG = "Main Activity";
 
+    AppLocationService appLocationService;
+    TextView tvAddress;
 
     /** Called when the activity is first created. */
     @Override
@@ -43,10 +59,20 @@ public class MainActivity extends Activity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Button backgroundBtn = (Button)findViewById(R.id.background_btn);
+
+        //handle button clicks
+        backgroundBtn.setOnClickListener(this);
+
         //retrieve a reference to the UI button
         Button captureBtn = (Button)findViewById(R.id.capture_btn);
         //handle button clicks
         captureBtn.setOnClickListener(this);
+
+        tvAddress = (TextView) findViewById(R.id.tvAddress);
+        appLocationService = new AppLocationService(MainActivity.this);
+
+
     }
 
     /**
@@ -63,6 +89,37 @@ public class MainActivity extends Activity implements OnClickListener {
             catch(ActivityNotFoundException anfe){
                 //display an error message
                 String errorMessage = "Whoops - your device doesn't support capturing images!";
+                Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        }
+
+        if(v.getId() == R.id.background_btn){
+            try{
+                Location location = appLocationService
+                        .getLocation(LocationManager.GPS_PROVIDER);
+
+                //you can hard-code the lat & long if you have issues with getting it
+                //remove the below if-condition and use the following couple of lines
+                double latitude = 45.95;
+                double longitude = -66.6667;
+
+                if (location != null) {
+                    //double latitude = location.getLatitude();
+                   // double longitude = location.getLongitude();
+                    LocationAddress locationAddress = new LocationAddress();
+                    locationAddress.getAddressFromLocation(latitude, longitude,
+                            getApplicationContext(), new GeocoderHandler());
+                } else {
+                    showSettingsAlert();
+                }
+
+
+
+            }
+            catch(ActivityNotFoundException anfe){
+                //display an error message
+                String errorMessage = "Whoopsie Daisies!";
                 Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
                 toast.show();
             }
@@ -133,6 +190,44 @@ public class MainActivity extends Activity implements OnClickListener {
             String errorMessage = "Whoops - your device doesn't support the crop action!";
             Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
             toast.show();
+        }
+    }
+    // Geo Location Methods
+    public void showSettingsAlert() {
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(
+                MainActivity.this);
+        alertDialog.setTitle("SETTINGS");
+        alertDialog.setMessage("Enable Location Provider! Go to settings menu?");
+        alertDialog.setPositiveButton("Settings",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(
+                                Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                        MainActivity.this.startActivity(intent);
+                    }
+                });
+        alertDialog.setNegativeButton("Cancel",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        alertDialog.show();
+    }
+
+    private class GeocoderHandler extends Handler {
+        @Override
+        public void handleMessage(Message message) {
+            String locationAddress;
+            switch (message.what) {
+                case 1:
+                    Bundle bundle = message.getData();
+                    locationAddress = bundle.getString("address");
+                    break;
+                default:
+                    locationAddress = null;
+            }
+            tvAddress.setText(locationAddress);
         }
     }
 }
