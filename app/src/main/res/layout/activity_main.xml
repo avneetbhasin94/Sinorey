@@ -7,32 +7,59 @@
     android:fitsSystemWindows="true"
     tools:context="mobiledev.unb.ca.sinorey.MainActivity">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:weightSum="1"
+        android:background="#353535">
 
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/intro"
             android:layout_margin="3dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:textColor="#c72020"
+            android:textAlignment="center"
+            android:textSize="45dp"
+            android:fontFamily="Liberation Sans"
+            android:id="@+id/textView" />
+
 
         <Button
             android:id="@+id/capture_btn"
-            android:layout_width="wrap_content"
+            android:layout_width="194dp"
             android:layout_height="wrap_content"
-            android:text="@string/capture" />
+            android:text="@string/capture"
+            android:layout_marginBottom="69dp"
+            android:textSize="15dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:textAlignment="center" />
 
         <ImageView
             android:id="@+id/picture"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/picture"
-            android:layout_margin="5dp"
-            android:background="@drawable/pic_border" />
-    </LinearLayout>
+            android:background="@drawable/pic_border"
+            android:layout_gravity="right"
+            android:layout_marginTop="82dp"
+            android:layout_below="@+id/textView"
+            android:layout_centerHorizontal="true" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/background_btn"
+            android:layout_above="@+id/capture_btn"
+            android:layout_alignLeft="@+id/capture_btn"
+            android:layout_alignStart="@+id/capture_btn"
+            android:layout_alignRight="@+id/capture_btn"
+            android:layout_alignEnd="@+id/capture_btn"
+            android:text="@string/background" />
+    </RelativeLayout>
 
 
 

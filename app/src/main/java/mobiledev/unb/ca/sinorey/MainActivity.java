@@ -22,9 +22,7 @@ import android.widget.Toast;
  * - when they return with the captured image Uri, the app launches the crop action intent
  * - on returning from the crop action, the app displays the cropped image
  *
- * Sue Smith
- * Mobiletuts+ Tutorial: Capturing and Cropping an Image with the Android Camera
- * July 2012
+ *
  *
  */
 public class MainActivity extends Activity implements OnClickListener {
