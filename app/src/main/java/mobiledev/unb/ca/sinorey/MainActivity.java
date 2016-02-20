@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -35,11 +36,14 @@ public class MainActivity extends Activity implements OnClickListener {
     //captured picture uri
     private Uri picUri;
 
+    private final String TAG = "Main Activity";
+
+
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.activity_main);
 
         //retrieve a reference to the UI button
         Button captureBtn = (Button)findViewById(R.id.capture_btn);
@@ -75,12 +79,15 @@ public class MainActivity extends Activity implements OnClickListener {
             //user is returning from capturing an image using the camera
             if(requestCode == CAMERA_CAPTURE){
                 //get the Uri for the captured image
+                Log.i(TAG, "Pic Uri 1");
                 picUri = data.getData();
+                Log.i(TAG, "Pic Uri 2");
                 //carry out the crop operation
                 performCrop();
             }
             //user is returning from cropping the image
             else if(requestCode == PIC_CROP){
+                Log.i(TAG, "Entered elseif");
                 //get the returned data
                 Bundle extras = data.getExtras();
                 //get the cropped bitmap
@@ -89,6 +96,8 @@ public class MainActivity extends Activity implements OnClickListener {
                 ImageView picView = (ImageView)findViewById(R.id.picture);
                 //display the returned cropped image
                 picView.setImageBitmap(thePic);
+                Log.i(TAG, "PIC_CROP");
+                System.out.println(PIC_CROP);
             }
         }
     }
@@ -99,8 +108,10 @@ public class MainActivity extends Activity implements OnClickListener {
     private void performCrop(){
         //take care of exceptions
         try {
+            Log.i(TAG, "Enter Try");
             //call the standard crop action intent (the user device may not support it)
             Intent cropIntent = new Intent("com.android.camera.action.CROP");
+            Log.i(TAG, "Intent maybe not fucked up");
             //indicate image type and Uri
             cropIntent.setDataAndType(picUri, "image/*");
             //set crop properties
@@ -109,12 +120,14 @@ public class MainActivity extends Activity implements OnClickListener {
             cropIntent.putExtra("aspectX", 1);
             cropIntent.putExtra("aspectY", 1);
             //indicate output X and Y
-            cropIntent.putExtra("outputX", 256);
-            cropIntent.putExtra("outputY", 256);
+            cropIntent.putExtra("outputX", 128);
+            cropIntent.putExtra("outputY", 128);
             //retrieve data on return
             cropIntent.putExtra("return-data", true);
             //start the activity - we handle returning in onActivityResult
+            Log.i(TAG, "Intent maybe fucked up 2");
             startActivityForResult(cropIntent, PIC_CROP);
+            Log.i(TAG, "Intent maybe fucked up 3");
         }
         //respond to users whose devices do not support the crop action
         catch(ActivityNotFoundException anfe){
