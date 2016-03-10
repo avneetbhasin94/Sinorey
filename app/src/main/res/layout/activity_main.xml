@@ -64,12 +64,22 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/tvAddress"
-            android:layout_below="@+id/picture"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginTop="85dp"
             android:textColor="#c72020"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            android:layout_above="@+id/background_btn"
+            android:layout_below="@+id/picture" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/backpicture"
+            android:layout_alignRight="@+id/background_btn"
+            android:layout_alignEnd="@+id/background_btn"
+            android:layout_alignLeft="@+id/background_btn"
+            android:layout_alignStart="@+id/background_btn"
+            android:layout_alignTop="@+id/tvAddress" />
 
     </RelativeLayout>
 

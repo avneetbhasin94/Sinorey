@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -29,6 +30,14 @@ import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 /**
  * ShootAndCropActivity demonstrates capturing and cropping camera images
@@ -73,6 +82,8 @@ public class MainActivity extends Activity implements OnClickListener {
         appLocationService = new AppLocationService(MainActivity.this);
 
 
+
+
     }
 
     /**
@@ -101,12 +112,12 @@ public class MainActivity extends Activity implements OnClickListener {
 
                 //you can hard-code the lat & long if you have issues with getting it
                 //remove the below if-condition and use the following couple of lines
-                double latitude = 45.95;
-                double longitude = -66.6667;
+               // double latitude = 45.95;
+                //double longitude = -66.6667;
 
                 if (location != null) {
-                    //double latitude = location.getLatitude();
-                   // double longitude = location.getLongitude();
+                    double latitude = location.getLatitude();
+                    double longitude = location.getLongitude();
                     LocationAddress locationAddress = new LocationAddress();
                     locationAddress.getAddressFromLocation(latitude, longitude,
                             getApplicationContext(), new GeocoderHandler());
@@ -123,7 +134,51 @@ public class MainActivity extends Activity implements OnClickListener {
                 Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
                 toast.show();
             }
-        }
+
+            /*Bitmap bitmap=null;
+            File f= new File("home1//ugrads//asingh1//CS2063//Project//Sinorey//app//src//main//res//mipmap-hdpi//ic_launcher.png");
+            String getDirectoryPath = f.getParent();
+            String path = "/res/mipmap-hdpi/ic_launcher.png";
+            System.out.print("the path is" +getDirectoryPath);
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+           // try {
+                bitmap = BitmapFactory.decodeFile(path, options);
+            //}
+            catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            ImageView image = (ImageView)findViewById(R.id.picture);
+            image.setImageBitmap(bitmap);
+        } */
+
+            //File imgFile = new  File("/CS2063/Project/picture.jpg");
+
+
+
+                //Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                Bitmap mBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.pic2);
+
+                ImageView myImage = (ImageView) findViewById(R.id.backpicture);
+
+                myImage.setImageBitmap(mBitmap);
+           // }
+           // else{
+               // System.out.println("it's not there");
+           // }
+
+
+            /*try {
+                ImageView i = (ImageView)findViewById(R.id.picture);
+                Bitmap bitmap = BitmapFactory.decodeStream((InputStream)new URL("http://www.frederictonkeepsakes.com/files/PostCards/PostCards-800/FKPC_802.01_op_640x426.jpg").getContent());
+                i.setImageBitmap(bitmap);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }*/
+
+            }
     }
 
     /**
