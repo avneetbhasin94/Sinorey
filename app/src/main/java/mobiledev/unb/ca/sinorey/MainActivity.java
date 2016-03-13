@@ -4,10 +4,13 @@ package mobiledev.unb.ca.sinorey;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.net.Uri;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -38,6 +41,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Random;
+import  java.util.Scanner;
 
 /**
  * ShootAndCropActivity demonstrates capturing and cropping camera images
@@ -56,11 +61,15 @@ public class MainActivity extends Activity implements OnClickListener {
     final int PIC_CROP = 2;
     //captured picture uri
     private Uri picUri;
+    private String cityloc = " ";
 
-    private final String TAG = "Main Activity";
+    private final static String TAG = "Main Activity";
 
     AppLocationService appLocationService;
     TextView tvAddress;
+    static Bitmap mScaledBitmap;
+    static Bitmap thePic;
+    static  Bitmap  mBitmap;
 
     /** Called when the activity is first created. */
     @Override
@@ -69,6 +78,8 @@ public class MainActivity extends Activity implements OnClickListener {
         setContentView(R.layout.activity_main);
 
         Button backgroundBtn = (Button)findViewById(R.id.background_btn);
+        Button mergeBtn = (Button)findViewById(R.id.merge);
+        mergeBtn.setOnClickListener(this);
 
         //handle button clicks
         backgroundBtn.setOnClickListener(this);
@@ -80,6 +91,8 @@ public class MainActivity extends Activity implements OnClickListener {
 
         tvAddress = (TextView) findViewById(R.id.tvAddress);
         appLocationService = new AppLocationService(MainActivity.this);
+        //Log.i(TAG,city);
+
 
 
 
@@ -112,15 +125,19 @@ public class MainActivity extends Activity implements OnClickListener {
 
                 //you can hard-code the lat & long if you have issues with getting it
                 //remove the below if-condition and use the following couple of lines
-               // double latitude = 45.95;
-                //double longitude = -66.6667;
+                double latitude = 45.4214;
+                double longitude = -75.6919;
 
                 if (location != null) {
-                    double latitude = location.getLatitude();
-                    double longitude = location.getLongitude();
+                   // double latitude = location.getLatitude();
+                   // double longitude = location.getLongitude();
                     LocationAddress locationAddress = new LocationAddress();
                     locationAddress.getAddressFromLocation(latitude, longitude,
                             getApplicationContext(), new GeocoderHandler());
+
+
+                    //city=LocationAddress.city;
+                    Log.i(TAG,cityloc);
                 } else {
                     showSettingsAlert();
                 }
@@ -157,11 +174,42 @@ public class MainActivity extends Activity implements OnClickListener {
 
 
                 //Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                Bitmap mBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.pic2);
+
+            if ("Fredericton".equals(cityloc)) {
+                 mBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.pic2);
+            }
+            else if ("Ottawa".equals(cityloc)) {
+                mBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ottawa);
+            }
+            else{
+                mBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.pic2);
+                Log.i(TAG,cityloc);
+            }
 
                 ImageView myImage = (ImageView) findViewById(R.id.backpicture);
 
-                myImage.setImageBitmap(mBitmap);
+
+
+                //myImage.setImageBitmap(mBitmap);
+
+
+
+                // TODO - set scaled bitmap size (mScaledBitmapSize) in range [2..4] * BITMAP_SIZE
+
+
+
+                // TODO - create the scaled bitmap using size set above
+               // Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.b64);
+               mScaledBitmap = Bitmap.createScaledBitmap(mBitmap, 1000, 1000, true);
+
+            myImage.setImageBitmap(mScaledBitmap);
+
+
+
+
+
+
+
            // }
            // else{
                // System.out.println("it's not there");
@@ -178,7 +226,34 @@ public class MainActivity extends Activity implements OnClickListener {
                 e.printStackTrace();
             }*/
 
+
+            /*if (v.getId() == R.id.merge){
+                Log.i(TAG,"is it even going in");
+                Bitmap overlay= overlay();
+                ImageView myImage1 = (ImageView) findViewById(R.id.backpicture);
+                myImage1.setImageBitmap(overlay);
+                Log.i(TAG,"Should do this");
+
+
+
+
+            }*/
+
             }
+
+        if (v.getId() == R.id.merge){
+            Log.i(TAG,"is it even going in");
+            Bitmap overlay= overlay();
+            ImageView myImage1 = (ImageView) findViewById(R.id.backpicture);
+            myImage1.setImageBitmap(overlay);
+            Log.i(TAG,"Should do this");
+
+
+
+
+        }
+
+
     }
 
     /**
@@ -201,7 +276,7 @@ public class MainActivity extends Activity implements OnClickListener {
                 //get the returned data
                 Bundle extras = data.getExtras();
                 //get the cropped bitmap
-                Bitmap thePic = extras.getParcelable("data");
+                 thePic = extras.getParcelable("data");
                 //retrieve a reference to the ImageView
                 ImageView picView = (ImageView)findViewById(R.id.picture);
                 //display the returned cropped image
@@ -247,6 +322,17 @@ public class MainActivity extends Activity implements OnClickListener {
             toast.show();
         }
     }
+    public static Bitmap overlay() {
+        Bitmap bmOverlay = Bitmap.createBitmap(mScaledBitmap.getWidth(), mScaledBitmap.getHeight(), mScaledBitmap.getConfig());
+
+        Canvas canvas = new Canvas(bmOverlay);
+
+        canvas.drawBitmap(mScaledBitmap, new Matrix(), null);
+        Log.i(TAG, "should go here bro");
+        canvas.drawBitmap(thePic, 400, 550, null);
+
+        return bmOverlay;
+    }
     // Geo Location Methods
     public void showSettingsAlert() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(
@@ -270,7 +356,7 @@ public class MainActivity extends Activity implements OnClickListener {
         alertDialog.show();
     }
 
-    private class GeocoderHandler extends Handler {
+    public class GeocoderHandler extends Handler {
         @Override
         public void handleMessage(Message message) {
             String locationAddress;
@@ -282,7 +368,18 @@ public class MainActivity extends Activity implements OnClickListener {
                 default:
                     locationAddress = null;
             }
-            tvAddress.setText(locationAddress);
+            System.out.print("the locationsdsswds is"+locationAddress);
+            //tvAddress.setText(locationAddress);
+           String line[]= locationAddress.split("/n");
+            cityloc = line[0];
+            System.out.print("the location is"+locationAddress);
+
+            Context context = getApplicationContext();
+            CharSequence text = locationAddress;
+            int duration = Toast.LENGTH_SHORT;
+
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
         }
     }
 }

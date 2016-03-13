@@ -15,6 +15,8 @@ import java.util.Locale;
 public class LocationAddress {
     private static final String TAG = "LocationAddress";
 
+
+
     public static void getAddressFromLocation(final double latitude, final double longitude,
                                               final Context context, final Handler handler) {
         Thread thread = new Thread() {
@@ -35,11 +37,14 @@ public class LocationAddress {
                         //sb.append(address.getLocality()).append("\n");
                        // sb.append(address.getAddressLine(1)).append("\n");
                       //  sb.append(address.getPostalCode()).append("\n");
+
                         sb.append(address.getLocality()).append("\n");
-                        sb.append(address.getAdminArea()+", ");
+                        sb.append(address.getAdminArea() + ", ");
                         sb.append(address.getCountryName());
                         result = sb.toString();
                         System.out.println("The result is "+result);
+
+
                     }
                 } catch (IOException e) {
                     Log.e(TAG, "Unable connect to Geocoder", e);
@@ -49,7 +54,7 @@ public class LocationAddress {
                     if (result != null) {
                         message.what = 1;
                         Bundle bundle = new Bundle();
-                        result = "Address:\n" + result;
+                       // result = "Address:\n" + result;
                         bundle.putString("address", result);
                         message.setData(bundle);
                     } else {
