@@ -43,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/picture"
-            android:background="@drawable/pic_border"
+
             android:layout_gravity="right"
             android:layout_below="@+id/textView"
             android:layout_centerHorizontal="true" />
@@ -74,7 +74,7 @@
             android:id="@+id/backpicture"
             android:layout_alignLeft="@+id/textView"
             android:layout_alignStart="@+id/textView"
-            android:layout_below="@+id/picture" />
+            android:layout_below="@+id/textView" />
 
         <Button
             style="?android:attr/buttonStyleSmall"

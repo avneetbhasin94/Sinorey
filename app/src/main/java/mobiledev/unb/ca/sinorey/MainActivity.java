@@ -70,6 +70,7 @@ public class MainActivity extends Activity implements OnClickListener {
     static Bitmap mScaledBitmap;
     static Bitmap thePic;
     static  Bitmap  mBitmap;
+    static String cityl;
 
     /** Called when the activity is first created. */
     @Override
@@ -129,7 +130,7 @@ public class MainActivity extends Activity implements OnClickListener {
                 double longitude = -75.6919;
 
                 if (location != null) {
-                   // double latitude = location.getLatitude();
+                  // double latitude = location.getLatitude();
                    // double longitude = location.getLongitude();
                     LocationAddress locationAddress = new LocationAddress();
                     locationAddress.getAddressFromLocation(latitude, longitude,
@@ -137,7 +138,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
 
                     //city=LocationAddress.city;
-                    Log.i(TAG,cityloc);
+                    //Log.i(TAG,cityl);
                 } else {
                     showSettingsAlert();
                 }
@@ -175,7 +176,7 @@ public class MainActivity extends Activity implements OnClickListener {
 
                 //Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
 
-            if ("Fredericton".equals(cityloc)) {
+           /* if ("Fredericton".equals(cityloc)) {
                  mBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.pic2);
             }
             else if ("Ottawa".equals(cityloc)) {
@@ -202,7 +203,7 @@ public class MainActivity extends Activity implements OnClickListener {
                // Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.b64);
                mScaledBitmap = Bitmap.createScaledBitmap(mBitmap, 1000, 1000, true);
 
-            myImage.setImageBitmap(mScaledBitmap);
+            myImage.setImageBitmap(mScaledBitmap); */
 
 
 
@@ -280,6 +281,7 @@ public class MainActivity extends Activity implements OnClickListener {
                 //retrieve a reference to the ImageView
                 ImageView picView = (ImageView)findViewById(R.id.picture);
                 //display the returned cropped image
+
                 picView.setImageBitmap(thePic);
                 Log.i(TAG, "PIC_CROP");
                 System.out.println(PIC_CROP);
@@ -329,7 +331,8 @@ public class MainActivity extends Activity implements OnClickListener {
 
         canvas.drawBitmap(mScaledBitmap, new Matrix(), null);
         Log.i(TAG, "should go here bro");
-        canvas.drawBitmap(thePic, 400, 550, null);
+        thePic= Bitmap.createScaledBitmap(thePic, 1200, 1200, true);
+        canvas.drawBitmap(thePic, 1600, 3000, null);
 
         return bmOverlay;
     }
@@ -357,9 +360,10 @@ public class MainActivity extends Activity implements OnClickListener {
     }
 
     public class GeocoderHandler extends Handler {
+        String locationAddress;
         @Override
         public void handleMessage(Message message) {
-            String locationAddress;
+
             switch (message.what) {
                 case 1:
                     Bundle bundle = message.getData();
@@ -370,16 +374,43 @@ public class MainActivity extends Activity implements OnClickListener {
             }
             System.out.print("the locationsdsswds is"+locationAddress);
             //tvAddress.setText(locationAddress);
-           String line[]= locationAddress.split("/n");
+           String line[]= locationAddress.split(" ");
             cityloc = line[0];
-            System.out.print("the location is"+locationAddress);
+            cityl=line[0];
+            System.out.print("theass location is "+cityl);
 
             Context context = getApplicationContext();
             CharSequence text = locationAddress;
             int duration = Toast.LENGTH_SHORT;
 
-            Toast toast = Toast.makeText(context, text, duration);
+           Toast toast = Toast.makeText(context,text, duration);
             toast.show();
+            if ("Fredericton".equals(line[0])) {
+                mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.fredericton);
+            }
+            else if ("Ottawa".equals(line[0])) {
+                mBitmap = BitmapFactory.decodeResource(getResources(),R.drawable.ottawa);
+            }
+            else{
+                mBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.pic2);
+                Log.i(TAG,cityloc);
+            }
+
+            ImageView myImage = (ImageView) findViewById(R.id.backpicture);
+
+
+
+            //myImage.setImageBitmap(mBitmap);
+
+
+            // Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.b64);
+            mScaledBitmap = Bitmap.createScaledBitmap(mBitmap, 4000, 6000, true);
+
+            myImage.setImageBitmap(mScaledBitmap);
+
+
+
         }
+
     }
 }

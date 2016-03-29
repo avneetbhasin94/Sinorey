@@ -14,7 +14,7 @@ import java.util.Locale;
 
 public class LocationAddress {
     private static final String TAG = "LocationAddress";
-
+    static String result = null;
 
 
     public static void getAddressFromLocation(final double latitude, final double longitude,
@@ -23,7 +23,7 @@ public class LocationAddress {
             @Override
             public void run() {
                 Geocoder geocoder = new Geocoder(context, Locale.getDefault());
-                String result = null;
+
                 try {
                     List<Address> addressList = geocoder.getFromLocation(
                             latitude, longitude, 1);
@@ -38,7 +38,7 @@ public class LocationAddress {
                        // sb.append(address.getAddressLine(1)).append("\n");
                       //  sb.append(address.getPostalCode()).append("\n");
 
-                        sb.append(address.getLocality()).append("\n");
+                        sb.append(address.getLocality()).append(" ");
                         sb.append(address.getAdminArea() + ", ");
                         sb.append(address.getCountryName());
                         result = sb.toString();
@@ -70,5 +70,10 @@ public class LocationAddress {
             }
         };
         thread.start();
+
+
+    }
+    public void getLocation(){
+        System.out.print("the location result is "+result);
     }
 }
