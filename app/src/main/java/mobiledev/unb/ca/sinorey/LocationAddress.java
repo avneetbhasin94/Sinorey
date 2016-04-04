@@ -30,14 +30,6 @@ public class LocationAddress {
                     if (addressList != null && addressList.size() > 0) {
                         Address address = addressList.get(0);
                         StringBuilder sb = new StringBuilder();
-                       /* for (int i = 0; i < address.getMaxAddressLineIndex(); i++) {
-                            sb.append(address.getAddressLine(i)).append("\n");
-                            System.out.println("The address line is " + address.getAddressLine(i));
-                        }*/
-                        //sb.append(address.getLocality()).append("\n");
-                       // sb.append(address.getAddressLine(1)).append("\n");
-                      //  sb.append(address.getPostalCode()).append("\n");
-
                         sb.append(address.getLocality()).append(" ");
                         sb.append(address.getAdminArea() + ", ");
                         sb.append(address.getCountryName());
@@ -54,7 +46,6 @@ public class LocationAddress {
                     if (result != null) {
                         message.what = 1;
                         Bundle bundle = new Bundle();
-                       // result = "Address:\n" + result;
                         bundle.putString("address", result);
                         message.setData(bundle);
                     } else {

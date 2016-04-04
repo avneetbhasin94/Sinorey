@@ -8,6 +8,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.widget.Toast;
 
 public class AppLocationService extends Service implements LocationListener {
 
@@ -23,13 +24,20 @@ public class AppLocationService extends Service implements LocationListener {
     }
 
     public Location getLocation(String provider) {
-        if (locationManager.isProviderEnabled(provider)) {
-            locationManager.requestLocationUpdates(provider,
-                    MIN_TIME_FOR_UPDATE, MIN_DISTANCE_FOR_UPDATE, this);
-            if (locationManager != null) {
-                location = locationManager.getLastKnownLocation(provider);
-                return location;
+        try {
+            if (locationManager.isProviderEnabled(provider)) {
+                locationManager.requestLocationUpdates(provider,
+                        MIN_TIME_FOR_UPDATE, MIN_DISTANCE_FOR_UPDATE, this);
+                if (locationManager != null) {
+                    location = locationManager.getLastKnownLocation(provider);
+                    return location;
+                }
             }
+        }
+        catch (SecurityException e){
+            String errorMessage = "no location  ";
+            Toast toast = Toast.makeText(this, errorMessage, Toast.LENGTH_SHORT);
+            toast.show();
         }
         return null;
     }

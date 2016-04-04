@@ -18,13 +18,15 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/intro"
-            android:layout_margin="3dp"
             android:textStyle="bold"
             android:textColor="#c72020"
             android:textAlignment="center"
             android:textSize="45dp"
             android:fontFamily="Liberation Sans"
-            android:id="@+id/textView" />
+            android:id="@+id/textView"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
 
         <Button
@@ -35,8 +37,9 @@
             android:textSize="15dp"
             android:textAlignment="center"
             android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@+id/picture"
-            android:layout_toEndOf="@+id/picture" />
+            android:layout_toEndOf="@+id/merge"
+            android:layout_toRightOf="@+id/merge"
+            android:layout_alignTop="@+id/background_btn" />
 
         <ImageView
             android:id="@+id/picture"
@@ -45,6 +48,7 @@
             android:contentDescription="@string/picture"
 
             android:layout_gravity="right"
+            android:focusable="true"
             android:layout_below="@+id/textView"
             android:layout_centerHorizontal="true" />
 
@@ -56,7 +60,9 @@
             android:text="@string/background"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/merge"
+            android:layout_toLeftOf="@+id/merge" />
 
         <TextView
             android:layout_width="fill_parent"
@@ -72,9 +78,9 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:id="@+id/backpicture"
-            android:layout_alignLeft="@+id/textView"
-            android:layout_alignStart="@+id/textView"
-            android:layout_below="@+id/textView" />
+            android:layout_below="@+id/textView"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
         <Button
             style="?android:attr/buttonStyleSmall"
@@ -82,8 +88,44 @@
             android:layout_height="wrap_content"
             android:text="merge"
             android:id="@+id/merge"
-            android:layout_alignBottom="@+id/tvAddress"
-            android:layout_centerHorizontal="true" />
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_alignTop="@+id/capture_btn" />
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleLarge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressBar"
+            android:indeterminate="false"
+            android:layout_centerVertical="true"
+            android:layout_alignRight="@+id/merge"
+            android:layout_alignEnd="@+id/merge"
+            android:layout_toRightOf="@+id/background_btn"
+            android:layout_toEndOf="@+id/background_btn" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/share_imgBtn"
+            android:src="@android:drawable/ic_menu_share"
+            android:focusable="false"
+            android:background="#353535"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/save_imgBtn"
+            android:src="@android:drawable/stat_sys_download_done"
+            android:clickable="false"
+            android:foregroundTint="#000000"
+            android:background="#353535"
+            android:layout_alignBottom="@+id/share_imgBtn"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
 
 
     </RelativeLayout>
